@@ -1,0 +1,65 @@
+<html>
+	<head>
+	</head>
+	<body>
+		<form action="/login/" method="post">
+			{% csrf_token %}
+			Email:<input type="text" name="email" />
+			<br />
+			<br />
+			Password:<input type="password" name="pass" />
+			<br />	
+			<br />
+			<input type="submit" name="submit" />
+		</form>
+
+			<br />
+			<br />
+			<br />
+	<div>
+		<form action="/signup/" method="post">
+			{% csrf_token %}
+ 			Name:<input type="text" name="name" /> 
+			<br />
+			<br />	
+			Email:<input type="text" name="email"/>
+			<br />
+			<br />			
+			Password:<input type="password" name="pass"/>
+<br />
+			<br />
+			Mobile_No:<input type="text" name="mobile"/>
+<br />			
+			<br />
+			Office_No:<input type="text" name="office"/>
+			<br />			
+<br />
+			Shop_name:<input type="text" name="shopname"/>
+			<br />			
+<br />
+			Shopid:<input type="text" name="sid" />
+			<br />
+			<br />
+			street:<input type="text" name="street"/>
+			<br />
+<br />
+			City:<input type="text" name="city"/>
+			<br />
+			<br />
+			<input type="submit" name="signup" />	
+				
+		</form>
+
+
+<br />
+<br />
+		<ul>
+		{%for item in errors %}
+			<li> {{item}} </li>
+		{% endfor %}
+		</ul>
+
+		
+	</div>	
+	</body>
+</html>
