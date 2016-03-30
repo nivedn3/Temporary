@@ -41,11 +41,13 @@ def sellerlogin(request):
 				Cus_expiry=[]
 				cus_loc=[]
 				Cus_name=[]
+				Cus_id=[]
+				Ser_price=[]
 				aks={}
-				
+				const=0
 				for i in dbobject1:
 					total={}
-					if int(dbobject.category)%int(dbobject1[k].cus_category)==0:
+					if (int(dbobject.category)%int(dbobject1[k].cus_category)==0 and (dbobject1[k].Cus_id not in dbobject.decline)):
 						
 						
 						total['Cus_link']=str(dbobject1[k].Cus_link)
@@ -54,7 +56,10 @@ def sellerlogin(request):
 						total['Cus_expiry']=str(dbobject1[k].Cus_expiry)
 						total['cus_loc']=str(dbobject1[k].cus_loc)
 						total['Cus_name']=str(dbobject1[k].Cus_name)
-						aks[k]=total	
+						total['Cus_id']=str(dbobject1[k].Cus_id)
+						total['Ser_price']=str(dbobject1[k].Ser_price)
+						aks[const]=total
+						const=const+1	
 
 					k=k+1
 
@@ -64,7 +69,7 @@ def sellerlogin(request):
 				n['result']=1
 				n['token']=token
 				n['Transactions']=aks
-				n['length']=k
+				n['length']=const
 			#	n['Ser_image']=Ser_image
 			#	n['Cus_name']=Cus_name
 			#	n['cus_loc']=cus_loc
@@ -201,6 +206,121 @@ def sellersignup(request):
 		if errors:
 
 			return render(request,'front.html',{'errors':errors})'''
+
+
+
+
+@csrf_exempt
+def decline(request):
+                email=""
+                token=""
+                token=request.POST.get('token','')
+                email=request.POST.get('email','')
+		decid=request.POST.get('decid','')
+#check the token and update the decline field, it could change
+                try:
+                        dbobject=sellerlogindb.objects.get(token=token)
+                        if email==dbobject.email:
+                                k=1
+                except:
+
+                        k=0
+                if k:
+                        dbobject.decline=str(decid)+dbobject.decline
+                        dbobject.save()
+			n={}
+                        n['result']=1
+                        n['returnid']=dbobject.decline
+                        j_d=json.dumps(n)
+                        return HttpResponse(json.dumps(n), content_type='application/json' )
+                elif k==0:
+                        n={}
+                        n['result']=0
+                       
+                        j_d=json.dumps(n)
+                        return HttpResponse(json.dumps(n), content_type='application/json' )
+
+def userdata(request):
+         email=""
+         token=""
+         token=request.POST.get('token','')
+         email=request.POST.get('email','')
+         try:
+                dbobject=sellerlogindb.objects.get(token=token)
+                if email==dbobject.email:
+                        k=1
+        except:
+                k=0
+        if k:
+		data=[]
+		data['user']=dbobject.user
+		data['password']=dbobject.password
+		data['mobile']=dbobject.mobile
+		data['shopname']=dbobject.shopname
+                data['shopid']=dbobject.shopid
+                data['office_no']=dbobject.office_no
+                data['city']=dbobject.city
+                data['Address1']=dbobject.Address1
+                data['Address2']=dbobject.Address2
+		data['sel_loc']=dbobject.sel_loc
+		data['category']=dbobject.category
+                n={}
+                n['result']=1
+                n['token']=token
+                n['data']=data
+                        #       n['Ser_image']=Ser_image
+                        #       n['Cus_name']=Cus_name
+                        #       n['cus_loc']=cus_loc
+                        #       n['Ser_product']=Ser_product
+                        #       n['Cus_expiry']=Cus_expiry
+                j_d=json.dumps(n)
+                return HttpResponse(json.dumps(n), content_type='application/json')
+         elif k==0:
+                n={}
+                n['result']=0
+                j_d=json.dumps(n)
+                return HttpResponse(json.dumps(n), content_type='application/json' )
+
+
+
+@csrf_exempt
+def updateuser(request):
+	 email=""
+         token=""
+         token=request.POST.get('token','')
+         email=request.POST.get('email','')
+	 try:
+ 	 	dbobject=sellerlogindb.objects.get(token=token)
+                if email==dbobject.email:
+      		        k=1
+	 except:
+		k=0
+	 if k:
+		name=request.POST.get('name','')
+                pswd=request.POST.get('pass','')
+                mobile=request.POST.get('mobile','')
+                shopname=request.POST.get('shopname','')
+                city=request.POST.get('city','')
+                Add1=request.POST.get('address1','')
+                sid=request.POST.get('sid','')
+                office_no=request.POST.get('office','')
+                Add2=request.POST.get('address2','')
+                sel_loc=request.POST.get('sel_loc','')
+	        p=sellerlogindb(user=name,password=pswd,mobile=mobile,shopid=sid,shopname=shopname,office_no=office,Address1=Add1,Address2=Add2,sel_loc=sel_loc)
+	        p.save()
+		n={}
+                n['result']=1
+                j_d=json.dumps(n)
+                return HttpResponse(json.dumps(n), content_type='application/json' )
+         elif k==0:
+                n={}
+                n['result']=0	
+                j_d=json.dumps(n)
+                return HttpResponse(json.dumps(n), content_type='application/json' )
+
+
+ 
+ 
 
 
 

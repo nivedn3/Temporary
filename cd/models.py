@@ -40,6 +40,8 @@ class sellerlogindb(models.Model):
 	token=models.CharField(max_length=100)
 	gps=models.CharField(max_length=100)
         imagepath=models.CharField(max_length=200,null=True)
+	decline=models.CharField(max_length=60000,default="123")
+
 class selldb(models.Model):
 	Cus_id=models.CharField(max_length=30) 
 	Q_price=models.CharField(max_length=50)
