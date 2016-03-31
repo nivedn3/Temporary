@@ -9,17 +9,9 @@ class request_conf(models.Model):
 	Ser_image=models.URLField()
 	cus_category=models.CharField(max_length=50,default=1)
 	Cus_email=models.CharField(max_length=50,null=True)
-
 	Ser_price=models.CharField(max_length=50)
-	#Q_price=models.CharField(max_length=50)
-	#Sel_type=models.IntegerField(default=False)
-	#Sel_comments=models.CharField(max_length=500)
 	Cus_expiry=models.IntegerField(null=True)
 	Cus_id=models.CharField(max_length=30,primary_key=True)
-	#Sel_deltype=models.IntegerField(default=False)
-	#Cus2_conf=models.IntegerField(default=False)
-	#Sel2_conf=models.IntegerField(default=False)
-	#img_path=models.CharField(max_length=100,null=True)
 	cus_loc=models.CharField(max_length=100,null=True)
 	Cus_name=models.CharField(max_length=100,null=True)
 	time=models.BigIntegerField(default=100)
@@ -41,7 +33,7 @@ class sellerlogindb(models.Model):
 	gcmid=models.CharField(max_length=1000)
 	token=models.CharField(max_length=100)
 	gps=models.CharField(max_length=100)
-        imagepath=models.CharField(max_length=200,null=True)
+    imagepath=models.CharField(max_length=200,null=True)
 	decline=models.CharField(max_length=60000,default="123")
 
 class selldb(models.Model):

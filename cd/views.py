@@ -61,6 +61,23 @@ def sellerlogin(request):
 						total['Cus_id']=str(dbobject1[k].Cus_id)
 						total['Ser_price']=dbobject1[k].Ser_price
 						total['time']=dbobject1[k].time
+						
+						try:
+							dbobject3=selldb.objects.get(Cus_id=dbobject1[k].Cus_id)
+							check=1
+						except:
+							check=0
+						if(check):
+							total['quote price']=dbobject3.Q_price
+							total['Sel_comments']=dbobject3.Sel_comments
+						else:
+							total['quoted_price']="Nil"
+						
+						
+													
+
+
+
 						aks[const]=total
 						const=const+1	
 
