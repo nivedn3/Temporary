@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
-from cd.views import sellerlogin,sellersignup,front,sellergcm,sellercategory,customer2seller,s2c,cus_conf,item,decline,userdata,updateuser
+from cd.views import sellerlogin,bargain,sellersignup,front,sellergcm,sellercategory,adv,feed,customer2seller,s2c,cus_conf,item,decline,userdata,updateuser
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -31,6 +31,9 @@ urlpatterns = [
     url(r'^decline/',decline),
     url(r'^userdata/',userdata),
     url(r'^updateuser/',updateuser),
+    url(r'^adv/',adv),
+    url(r'^feed/',feed),
+    url(r'^bargain/',bargain),
  #   url(r'^simg/',simg),    
 
 

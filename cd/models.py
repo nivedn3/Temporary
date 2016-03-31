@@ -22,6 +22,8 @@ class request_conf(models.Model):
 	#img_path=models.CharField(max_length=100,null=True)
 	cus_loc=models.CharField(max_length=100,null=True)
 	Cus_name=models.CharField(max_length=100,null=True)
+	time=models.BigIntegerField(default=100)
+
 
 class sellerlogindb(models.Model):
 	user=models.CharField(max_length=50)
@@ -52,8 +54,19 @@ class selldb(models.Model):
 	Sel2_conf=models.IntegerField(default=False)
 	img_path=models.CharField(max_length=100,null=True)
 	Sel_id=models.CharField(max_length=30,primary_key=True)
+	Sel_email=models.EmailField(null=True)
+	bprice=models.CharField(max_length=200,null=True)
+	btime=models.BigIntegerField(null=True)
+class adv(models.Model):
+	adv=models.CharField(max_length=2000,null=True)
+	edate=models.CharField(max_length=100)
+	sdate=models.CharField(max_length=100)
+	email=models.CharField(max_length=100,null=True)
 
 
+class feed(models.Model):
+	feed=models.CharField(max_length=2000,null=True)
+	email=models.CharField(max_length=100,null=True)
 
 	
 	
