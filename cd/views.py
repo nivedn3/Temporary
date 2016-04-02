@@ -255,7 +255,7 @@ def decline(request):
                         j_d=json.dumps(n)
                         return HttpResponse(json.dumps(n), content_type='application/json' )
 @csrf_exempt
-def adv(request):
+def advt(request):
                 token=request.POST.get('token','')
                 email=request.POST.get('email','')
                 adv=request.POST.get('adv','')
