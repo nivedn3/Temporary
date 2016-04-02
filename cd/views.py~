@@ -47,6 +47,18 @@ def sellerlogin(request):
 				time=[]
 				aks={}
 				const=0
+				data={}
+				data['user']=dbobject.user
+				data['password']=dbobject.password
+				data['mobile']=dbobject.mobile
+				data['shopname']=dbobject.shopname
+                		data['shopid']=dbobject.shopid
+                		data['office_no']=dbobject.office_no
+                		data['city']=dbobject.city
+                		data['Address1']=dbobject.Address1
+                		data['Address2']=dbobject.Address2
+				data['sel_loc']=dbobject.sel_loc
+				data['category']=dbobject.category
 				for i in dbobject1:
 					total={}
 					if (int(dbobject.category)%int(dbobject1[k].cus_category)==0 and (dbobject1[k].Cus_id not in dbobject.decline)):
@@ -68,11 +80,16 @@ def sellerlogin(request):
 						except:
 							check=0
 						if(check):
+							total['quoted']=1
 							total['quote price']=dbobject3.Q_price
 							total['Sel_comments']=dbobject3.Sel_comments
+							if dbobject3.bprice!=NULL:
+								total['bargain']=1
+								total['bprice']=dbobject3.bprice
+								total['btime']=dbobject3.btime
 						else:
 							total['quoted_price']="Nil"
-						
+							total['quoted']=0
 						
 													
 
@@ -91,6 +108,7 @@ def sellerlogin(request):
 				n['Transactions']=aks
 				n['length']=const
 				n['cat']=dbobject.category
+				n['seller_data']=data
 			#	n['Ser_image']=Ser_image
 			#	n['Cus_name']=Cus_name
 			#	n['cus_loc']=cus_loc
@@ -603,6 +621,12 @@ def cus_conf(request):
 			if k:
 				dbobject2.Cus2_conf=1
 				dbobject2.save()
+				dbobject=sellerlogindb.objects.get(email=Sel_email)
+				dbobject1=request_conf.objects.get(Cus_id=dbobject2.Cus_id)
+				pson={'delay_while_idle': True, 'collapse_key': 'score_update', 'time_to_live': 108, 'data':{'quoted':"1",'Cus_id':dbobject2.Cus_id,'price': dbobject1.Ser_price,'cus_loc':dbobject1.cus_loc, 'name': dbobject1.Ser_product,'buyer_name':dbobject1.Cus_name,'imgurl':dbobject1.Ser_image,'time':dbobject1.Cus_expiry,'timenow':dbobject1.time},'registration_ids':dbobject.gcmid}
+				h={'Content-Type': 'application/json', 'Authorization': 'key=AIzaSyBxEodHSh3moPoMwYkipLEXAhYUn3rptTg'}
+	                        kson=json.dumps(pson)
+	                        r=requests.post("https://android.googleapis.com/gcm/send",data=kson,headers=h)				
 				n={}
 				n['result']=1
 				j_d=json.dumps(n)				
@@ -613,6 +637,32 @@ def cus_conf(request):
 				j_d=json.dumps(n)				
 				return HttpResponse(json.dumps(n), content_type='application/json' )
 
+def sel_conf(request):
+	 token=request.POST.get('token','')
+         email=request.POST.get('email','')
+	 Sel_id=request.POST.get('Sel_id','')
+	 try:
+ 	 	dbobject=sellerlogindb.objects.get(token=token)
+                if email==dbobject.email:
+      		        k=1
+	 except:
+		k=0
+	 if k:
+		dbobject2=selldb.objects.get(Sel_id=Sel_id)
+		dbobject2.Sel2_conf=1
+		dbobject2.save()
+		n={}
+		n['result']=1
+		j_d=json.dumps(n)				
+		return HttpResponse(json.dumps(n), content_type='application/json' )
+	else:
+		n={}
+		n['result']=0
+		j_d=json.dumps(n)				
+		return HttpResponse(json.dumps(n), content_type='application/json' )
+		
+		
+	
 
 @csrf_exempt
 def item(request):
