@@ -597,7 +597,7 @@ def cus_conf(request):
 				n['result']=0
 				j_d=json.dumps(n)				
 				return HttpResponse(json.dumps(n), content_type='application/json' )
-
+@csrf_exempt
 def sel_conf(request):
 	 token=request.POST.get('token','')
          email=request.POST.get('email','')
@@ -609,10 +609,10 @@ def sel_conf(request):
 	 except:
 		k=0
 	 if k:
-		dbobject2=selldb.objects.get(Sel_email=email)
-		if dbobject2.Cus_id==Cus_id:		
-			dbobject2.Sel2_conf=1
-			dbobject2.save()
+		dbobject2=selldb.objects.get(Sel_email=email,Cus_id=Cus_id)
+			
+		dbobject2.Sel2_conf=1
+		dbobject2.save()
 		n={}
 		n['result']=1
 		j_d=json.dumps(n)				
