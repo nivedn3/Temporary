@@ -582,7 +582,7 @@ def cus_conf(request):
 			if k:
 				dbobject2.Cus2_conf=1
 				dbobject2.save()
-				dbobject=sellerlogindb.objects.get(email=Sel_email)
+				dbobject=sellerlogindb.objects.get(Sel_email=email)
 				dbobject1=request_conf.objects.get(Cus_id=dbobject2.Cus_id)
 				pson={'delay_while_idle': True, 'collapse_key': 'score_update', 'time_to_live': 108, 'data': {'quoted':"1",'bargained':1,'selcon':1,'cuscon':1,'bgprice':dbobject2.bprice,'bgexptime':dbobject2.btime,'id':dbobject2.Cus_id,'price': dbobject1.Ser_price,'loc':dbobject1.cus_loc, 'name': dbobject1.Ser_product,'buyer_name':dbobject1.Cus_name,'imgurl':dbobject1.Ser_image,'time':dbobject1.Cus_expiry,'timenow':dbobject1.time,'qprice':dbobject2.Q_price,'deltype':dbobject2.Sel_deltype,'type':dbobject2.Sel_type,'comment':dbobject2.Sel_comments},'registration_ids':[dbobject.gcmid]}
 				h={'Content-Type': 'application/json', 'Authorization': 'key=AIzaSyBxEodHSh3moPoMwYkipLEXAhYUn3rptTg'}
