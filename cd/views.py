@@ -601,7 +601,7 @@ def cus_conf(request):
 def sel_conf(request):
 	 token=request.POST.get('token','')
          email=request.POST.get('email','')
-	 Sel_id=request.POST.get('Sel_id','')
+	 Cus_id=request.POST.get('Cus_id','')
 	 try:
  	 	dbobject=sellerlogindb.objects.get(token=token)
                 if email==dbobject.email:
@@ -609,9 +609,10 @@ def sel_conf(request):
 	 except:
 		k=0
 	 if k:
-		dbobject2=selldb.objects.get(Sel_id=Sel_id)
-		dbobject2.Sel2_conf=1
-		dbobject2.save()
+		dbobject2=selldb.objects.get(Sel_email=email)
+		if dbobject2.Cus_id==Cus_id:		
+			dbobject2.Sel2_conf=1
+			dbobject2.save()
 		n={}
 		n['result']=1
 		j_d=json.dumps(n)				
