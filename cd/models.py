@@ -50,7 +50,7 @@ class selldb(models.Model):
 	bprice=models.CharField(max_length=200,null=True)
 	btime=models.BigIntegerField(null=True)
 class adv(models.Model):
-	adv=models.CharField(max_length=2000,null=True)
+	advt=models.CharField(max_length=2000,null=True)
 	edate=models.CharField(max_length=100)
 	sdate=models.CharField(max_length=100)
 	email=models.CharField(max_length=100,null=True)

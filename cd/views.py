@@ -258,7 +258,7 @@ def decline(request):
 def advt(request):
                 token=request.POST.get('token','')
                 email=request.POST.get('email','')
-                adv=request.POST.get('adv','')
+                advt=request.POST.get('adv','')
 		sdate=request.POST.get('sdate','')
 		edate=request.POST.get('edate','')		
 #check the token and update the decline field, it could change
@@ -269,7 +269,7 @@ def advt(request):
                 except:
                         k=0
                 if k:
-                        q=adv(adv=adv,sdate=sdate,edate=edate,email=email)
+                        q=adv(advt=advt,sdate=sdate,edate=edate,email=email)
 			q.save()
                         n={}
                         n['result']=1
