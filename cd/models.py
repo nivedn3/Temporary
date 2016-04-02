@@ -57,7 +57,7 @@ class adv(models.Model):
 
 
 class feed(models.Model):
-	feed=models.CharField(max_length=2000,null=True)
+	feedb=models.CharField(max_length=2000,null=True)
 	email=models.CharField(max_length=100,null=True)
 
 	

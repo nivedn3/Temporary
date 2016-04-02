@@ -337,7 +337,7 @@ def feed(request):
 
                         k=0
                 if k:
-                        dbobject=feed(feed=feed,email=email)
+                        dbobject=feed(feedb=feed,email=email)
                         dbobject.save()
 			n={}
                         n['result']=1
