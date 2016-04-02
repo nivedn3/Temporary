@@ -47,8 +47,8 @@ class selldb(models.Model):
 	img_path=models.CharField(max_length=100,null=True)
 	Sel_id=models.CharField(max_length=30,primary_key=True)
 	Sel_email=models.EmailField(null=True)
-	bprice=models.CharField(max_length=200,null=True)
-	btime=models.BigIntegerField(null=True)
+	bprice=models.CharField(max_length=200,default=0)
+	btime=models.BigIntegerField(default=0)
 class adv(models.Model):
 	advt=models.CharField(max_length=2000,null=True)
 	edate=models.CharField(max_length=100)
