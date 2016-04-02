@@ -76,7 +76,7 @@ def sellerlogin(request):
 
 								total['Sel_deltype']=dbobject3.Sel_deltype
 								total['Sel_type']=dbobject3.Sel_type
-							if dbobject3.bprice!=NULL:
+							if dbobject3.bprice!=0:
 
 								total['bargain']=1
 								total['bprice']=dbobject3.bprice

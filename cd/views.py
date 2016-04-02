@@ -74,8 +74,8 @@ def sellerlogin(request):
 							total['Sel_comments']=dbobject3.Sel_comments
 							if dbobject3.bprice!=0:
 
-								total['Sel_deltype']=dbobject3.Sel_deltype
-								total['Sel_type']=dbobject3.Sel_type
+								total['deltype']=dbobject3.Sel_deltype
+								total['type']=dbobject3.Sel_type
 							if dbobject3.bprice!=0:
 
 								total['bargain']=1
