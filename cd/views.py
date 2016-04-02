@@ -32,10 +32,8 @@ def sellerlogin(request):
 				token=''.join(random.choice(string.lowercase+string.uppercase+string.digits) for i in range(32))
 				dbobject.token=token
 				dbobject.save()
-
 				dbobject1=request_conf.objects.all()
 				k=0
-
 				Cus_link=[]
 				Ser_product=[]
 				Ser_image=[]
@@ -47,12 +45,9 @@ def sellerlogin(request):
 				time=[]
 				aks={}
 				const=0
-				
 				for i in dbobject1:
 					total={}
 					if (int(dbobject.category)%int(dbobject1[k].cus_category)==0 and (dbobject1[k].Cus_id not in dbobject.decline)):
-						
-						
 						total['Cus_link']=str(dbobject1[k].Cus_link)
 						total['Ser_product']=str(dbobject1[k].Ser_product)
 						total['Ser_image']=str(dbobject1[k].Ser_image)
@@ -62,7 +57,6 @@ def sellerlogin(request):
 						total['Cus_id']=str(dbobject1[k].Cus_id)
 						total['Ser_price']=dbobject1[k].Ser_price
 						total['time']=dbobject1[k].time
-						
 						try:
 							dbobject3=selldb.objects.get(Cus_id=dbobject1[k].Cus_id)
 							check=1
@@ -82,20 +76,12 @@ def sellerlogin(request):
 								total['bgexptime']=dbobject3.btime
 							else:
 								total['bargained']=0
-
 						else:
 							total['qprice']="Nil"
 							total['quoted']=0
-						
-													
-
-
-
 						aks[const]=total
 						const=const+1	
-
 					k=k+1
-
 				n={}
 				n['result']=1
 				n['token']=token
@@ -191,7 +177,6 @@ def sellersignup(request):
 			office_no=request.POST.get('office','')
 			Add2=request.POST.get('address2','')
 			sel_loc=request.POST.get('sel_loc','')
-			#c=users.objects.get(email=email)	
 			try:
 				c=sellerlogindb.objects.get(email=email)
 				errors.append('email already used')
@@ -221,16 +206,6 @@ def sellersignup(request):
 				j_d=json.dumps(n)				
 				return HttpResponse(json.dumps(n), content_type='application/json' )
 				
-		
-
-
-				'''return render(request,'signup.html',)
-			else:
-				return render(request,'front.html',{'errors':errors})	
-		if errors:
-
-			return render(request,'front.html',{'errors':errors})'''
-
 @csrf_exempt
 def decline(request):
                 token=request.POST.get('token','')
@@ -308,7 +283,7 @@ def bargain(request):
 			Sel_email=dbobject2.Sel_email
 			dbobject=sellerlogindb.objects.get(email=Sel_email)
 			dbobject1=request_conf.objects.get(Cus_id=dbobject2.Cus_id)
-                        pson={'delay_while_idle': True, 'collapse_key': 'score_update', 'time_to_live': 108, 'data': {'quoted':"1",'bargained':1,'bgprice':bprice,'bgexptime':btime,'Cus_id':dbobject2.Cus_id,'price': dbobject1.Ser_price,'cus_loc':dbobject1.cus_loc, 'name': dbobject1.Ser_product,'buyer_name':dbobject1.Cus_name,'imgurl':dbobject1.Ser_image,'time':dbobject1.Cus_expiry,'timenow':dbobject1.time},'registration_ids':[dbobject.gcmid]}
+                        pson={'delay_while_idle': True, 'collapse_key': 'score_update', 'time_to_live': 108, 'data': {'quoted':"1",'bargained':1,'bgprice':bprice,'bgexptime':btime,'id':dbobject2.Cus_id,'price': dbobject1.Ser_price,'loc':dbobject1.cus_loc, 'name': dbobject1.Ser_product,'buyer_name':dbobject1.Cus_name,'imgurl':dbobject1.Ser_image,'time':dbobject1.Cus_expiry,'timenow':dbobject1.time,'qprice':dbobject2.Q_price,'deltype':dbobject2.Sel_deltype,'type':dbobject2.Sel_type,'comment':dbobject2.Sel_comments},'registration_ids':[dbobject.gcmid]}
                         h={'Content-Type': 'application/json', 'Authorization': 'key=AIzaSyBxEodHSh3moPoMwYkipLEXAhYUn3rptTg'}
                         kson=json.dumps(pson)
                         r=requests.post("https://android.googleapis.com/gcm/send",data=kson,headers=h)
