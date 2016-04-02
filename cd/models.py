@@ -33,7 +33,7 @@ class sellerlogindb(models.Model):
 	gcmid=models.CharField(max_length=1000)
 	token=models.CharField(max_length=100)
 	gps=models.CharField(max_length=100)
-    imagepath=models.CharField(max_length=200,null=True)
+        imagepath=models.CharField(max_length=200,null=True)
 	decline=models.CharField(max_length=60000,default="123")
 
 class selldb(models.Model):
