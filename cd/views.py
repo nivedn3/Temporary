@@ -336,6 +336,7 @@ def bargain(request):
                         n={}
                         n['result']=1
 			n['gcmid']=dbobject.gcmid
+			n['r']=str(r)
                         j_d=json.dumps(n)
                         return HttpResponse(json.dumps(n), content_type='application/json' )
              #   elif k==0:
