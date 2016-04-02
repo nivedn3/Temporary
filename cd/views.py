@@ -655,7 +655,7 @@ def sel_conf(request):
 		n['result']=1
 		j_d=json.dumps(n)				
 		return HttpResponse(json.dumps(n), content_type='application/json' )
-	else:
+	 else:
 		n={}
 		n['result']=0
 		j_d=json.dumps(n)				
