@@ -327,7 +327,7 @@ def bargain(request):
 			Sel_email=dbobject2.Sel_email
 			dbobject=sellerlogindb.objects.get(email=Sel_email)
 			dbobject1=request_conf.objects.get(Cus_id=dbobject2.Cus_id)
-                        pson={'delay_while_idle': True, 'collapse_key': 'score_update', 'time_to_live': 108, 'data': {'quoted':"1",'bargained':1,'bgprice':bprice,'bgexptime':btime,'Cus_id':dbobject2.Cus_id,'price': dbobject1.Ser_price,'cus_loc':dbobject1.cus_loc, 'name': dbobject1.Ser_product,'buyer_name':dbobject1.Cus_name,'imgurl':dbobject1.Ser_image,'time':dbobject1.Cus_expiry,'timenow':dbobject1.time},'registration_ids':dbobject.gcmid}
+                        pson={'delay_while_idle': True, 'collapse_key': 'score_update', 'time_to_live': 108, 'data': {'quoted':"1",'bargained':1,'bgprice':bprice,'bgexptime':btime,'Cus_id':dbobject2.Cus_id,'price': dbobject1.Ser_price,'cus_loc':dbobject1.cus_loc, 'name': dbobject1.Ser_product,'buyer_name':dbobject1.Cus_name,'imgurl':dbobject1.Ser_image,'time':dbobject1.Cus_expiry,'timenow':dbobject1.time},'registration_ids':[dbobject.gcmid]}
 
                         h={'Content-Type': 'application/json', 'Authorization': 'key=AIzaSyBxEodHSh3moPoMwYkipLEXAhYUn3rptTg'}
                         kson=json.dumps(pson)
