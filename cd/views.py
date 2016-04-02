@@ -2,7 +2,7 @@ from django.shortcuts import render
 import string,random
 import sys
 # Create your views here.
-from cd.models import sellerlogindb,request_conf,selldb
+from cd.models import sellerlogindb,request_conf,selldb,adv,feed
 from django.views.decorators.csrf import csrf_exempt 
 import json
 from django.http import HttpResponse
