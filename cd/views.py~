@@ -47,18 +47,7 @@ def sellerlogin(request):
 				time=[]
 				aks={}
 				const=0
-				data={}
-				data['user']=dbobject.user
-				data['password']=dbobject.password
-				data['mobile']=dbobject.mobile
-				data['shopname']=dbobject.shopname
-                		data['shopid']=dbobject.shopid
-                		data['office_no']=dbobject.office_no
-                		data['city']=dbobject.city
-                		data['Address1']=dbobject.Address1
-                		data['Address2']=dbobject.Address2
-				data['sel_loc']=dbobject.sel_loc
-				data['category']=dbobject.category
+				
 				for i in dbobject1:
 					total={}
 					if (int(dbobject.category)%int(dbobject1[k].cus_category)==0 and (dbobject1[k].Cus_id not in dbobject.decline)):
@@ -83,6 +72,8 @@ def sellerlogin(request):
 							total['quoted']=1
 							total['quote price']=dbobject3.Q_price
 							total['Sel_comments']=dbobject3.Sel_comments
+							total['Sel_dettype']=dbobject3.Sel_deltype
+							total['Sel_type']=dbobject3.Sel_type
 							if dbobject3.bprice!=NULL:
 								total['bargain']=1
 								total['bprice']=dbobject3.bprice
@@ -108,7 +99,18 @@ def sellerlogin(request):
 				n['Transactions']=aks
 				n['length']=const
 				n['cat']=dbobject.category
-				n['seller_data']=data
+				
+				n['user']=dbobject.user
+				n['password']=dbobject.password
+				n['mobile']=dbobject.mobile
+				n['shopname']=dbobject.shopname
+                		n['shopid']=dbobject.shopid
+                		n['office_no']=dbobject.office_no
+                		n['city']=dbobject.city
+                		n['Address1']=dbobject.Address1
+                		n['Address2']=dbobject.Address2
+				n['sel_loc']=dbobject.sel_loc
+				n['category']=dbobject.category
 			#	n['Ser_image']=Ser_image
 			#	n['Cus_name']=Cus_name
 			#	n['cus_loc']=cus_loc
