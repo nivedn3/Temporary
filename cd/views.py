@@ -597,7 +597,7 @@ def cus_conf(request):
 				n['result']=0
 				j_d=json.dumps(n)				
 				return HttpResponse(json.dumps(n), content_type='application/json' )
-
+@csrf_exempt
 def sel_conf(request):
 	 token=request.POST.get('token','')
          email=request.POST.get('email','')

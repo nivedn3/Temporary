@@ -610,9 +610,9 @@ def sel_conf(request):
 		k=0
 	 if k:
 		dbobject2=selldb.objects.get(Sel_email=email)
-		if dbobject2.		
+		if dbobject2.Cus_id==Cus_id:		
 			dbobject2.Sel2_conf=1
-		dbobject2.save()
+			dbobject2.save()
 		n={}
 		n['result']=1
 		j_d=json.dumps(n)				
