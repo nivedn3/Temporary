@@ -83,7 +83,7 @@ def sellerlogin(request):
 							total['quoted']=1
 							total['quote price']=dbobject3.Q_price
 							total['Sel_comments']=dbobject3.Sel_comments
-							if dbobject3.bprice!=NULL:
+							if dbobject3.bprice!=0:
 								total['bargain']=1
 								total['bprice']=dbobject3.bprice
 								total['btime']=dbobject3.btime
