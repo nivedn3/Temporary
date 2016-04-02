@@ -74,10 +74,12 @@ def sellerlogin(request):
 							total['Sel_comments']=dbobject3.Sel_comments
 							total['deltype']=dbobject3.Sel_deltype
 							total['type']=dbobject3.Sel_type
+							total['cuscon']=dbobject3.Cus2_conf
+							total['selcon']=dbobject3.Sel2_conf						
 							if dbobject3.bprice!=0:
 								total['bargained']=1
-								total['bprice']=dbobject3.bprice
-								total['btime']=dbobject3.btime
+								total['bgprice']=dbobject3.bprice
+								total['bgexptime']=dbobject3.btime
 							else:
 								total['bargained']=0
 
@@ -100,7 +102,6 @@ def sellerlogin(request):
 				n['Transactions']=aks
 				n['length']=const
 				n['cat']=dbobject.category
-
 				n['user']=dbobject.user
 				n['password']=dbobject.password
 				n['mobile']=dbobject.mobile
