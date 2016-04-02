@@ -70,14 +70,14 @@ def sellerlogin(request):
 							check=0
 						if(check):
 							total['quoted']=1
-							total['quote price']=dbobject3.Q_price
+							total['qprice']=dbobject3.Q_price
 							total['Sel_comments']=dbobject3.Sel_comments
 							if dbobject3.bprice!=0:
 								total['bargain']=1
 								total['bprice']=dbobject3.bprice
 								total['btime']=dbobject3.btime
 						else:
-							total['quoted_price']="Nil"
+							total['qprice']="Nil"
 							total['quoted']=0
 						
 													
@@ -97,7 +97,7 @@ def sellerlogin(request):
 				n['Transactions']=aks
 				n['length']=const
 				n['cat']=dbobject.category
-				n['seller_data']=data
+		
 				n['user']=dbobject.user
 				n['password']=dbobject.password
 				n['mobile']=dbobject.mobile
