@@ -72,7 +72,13 @@ def sellerlogin(request):
 							total['quoted']=1
 							total['qprice']=dbobject3.Q_price
 							total['Sel_comments']=dbobject3.Sel_comments
+<<<<<<< HEAD
 							if dbobject3.bprice!=0:
+=======
+							total['Sel_deltype']=dbobject3.Sel_deltype
+							total['Sel_type']=dbobject3.Sel_type
+							if dbobject3.bprice!=NULL:
+>>>>>>> 60d5246bf504b4e55a6076a24caa34448eadbeb4
 								total['bargain']=1
 								total['bprice']=dbobject3.bprice
 								total['btime']=dbobject3.btime
@@ -97,7 +103,11 @@ def sellerlogin(request):
 				n['Transactions']=aks
 				n['length']=const
 				n['cat']=dbobject.category
+<<<<<<< HEAD
 		
+=======
+				
+>>>>>>> 60d5246bf504b4e55a6076a24caa34448eadbeb4
 				n['user']=dbobject.user
 				n['password']=dbobject.password
 				n['mobile']=dbobject.mobile
