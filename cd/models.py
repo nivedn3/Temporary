@@ -16,7 +16,6 @@ class request_conf(models.Model):
 	Cus_name=models.CharField(max_length=100,null=True)
 	time=models.BigIntegerField(default=100)
 
-
 class sellerlogindb(models.Model):
 	user=models.CharField(max_length=50)
 	password=models.CharField(max_length=50)
@@ -36,6 +35,15 @@ class sellerlogindb(models.Model):
         imagepath=models.CharField(max_length=200,null=True)
 	decline=models.CharField(max_length=60000,default="123")
 
+class customerlogindb(models.Model):
+	user=models.CharField(max_length=50)
+	password=models.CharField(max_length=50)
+	email=models.EmailField(primary_key=True)
+	mobile=models.BigIntegerField()
+	gcmid=models.CharField(max_length=1000)
+	token=models.CharField(max_length=100)
+	
+
 class selldb(models.Model):
 	Cus_id=models.CharField(max_length=30) 
 	Q_price=models.CharField(max_length=50)
@@ -49,12 +57,14 @@ class selldb(models.Model):
 	Sel_email=models.EmailField(null=True)
 	bprice=models.CharField(max_length=200,default=0)
 	btime=models.BigIntegerField(default=0)
+	delivery=models.IntegerField(default=0)
+	pickup=models.IntegerField(default=0)
+
 class adv(models.Model):
 	advt=models.CharField(max_length=2000,null=True)
 	edate=models.CharField(max_length=100)
 	sdate=models.CharField(max_length=100)
 	email=models.CharField(max_length=100,null=True)
-
 
 class feed(models.Model):
 	feedb=models.CharField(max_length=2000,null=True)
