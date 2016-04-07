@@ -2,7 +2,7 @@ from django.shortcuts import render
 import string,random
 import sys
 # Create your views here.
-from cd.models import sellerlogindb,request_conf,selldb,adv,feed
+from cd.models import customerlogindb,sellerlogindb,request_conf,selldb,adv,feed
 from django.views.decorators.csrf import csrf_exempt 
 import json
 from django.http import HttpResponse
@@ -213,9 +213,9 @@ def decline(request):
                 decid=request.POST.get('decid','')
 #check the token and update the decline field, it could change
                 try:
-                        dbobject=sellerlogindb.objects.get(token=token)
-                        if email==dbobject.email:
-                                k=1
+                        dbobject=sellerlogindb.objects.get(token=token,email=email)
+                        #if email==dbobject.email:
+                        k=1
                 except:
 
                         k=0
@@ -241,9 +241,9 @@ def advt(request):
 		edate=request.POST.get('edate','')		
 #check the token and update the decline field, it could change
                 try:
-                        dbobject=sellerlogindb.objects.get(token=token)
-                        if email==dbobject.email:
-                                k=1
+                        dbobject=sellerlogindb.objects.get(token=token,email=email)
+                       # if email==dbobject.email:
+                        k=1
                 except:
                         k=0
                 if k:
@@ -309,9 +309,9 @@ def feed(request):
 		feed=request.POST.get('feed','')
 #check the token and update the decline field, it could change
                 try:
-                        dbobject=sellerlogindb.objects.get(token=token)
-                        if email==dbobject.email:
-                                k=1
+                        dbobject=sellerlogindb.objects.get(token=token,email=email)
+                        #if email==dbobject.email:
+                        k=1
                 except:
 
                         k=0
@@ -335,9 +335,9 @@ def userdata(request):
          token=request.POST.get('token','')
          email=request.POST.get('email','')
          try:
-                dbobject=sellerlogindb.objects.get(token=token)
-                if email==dbobject.email:
-                        k=1
+                dbobject=sellerlogindb.objects.get(token=token,email=email)
+                #if email==dbobject.email:
+                k=1
          except:
                 k=0
          if k:
@@ -380,9 +380,9 @@ def updateuser(request):
          token=request.POST.get('token','')
          email=request.POST.get('email','')
 	 try:
- 	 	dbobject=sellerlogindb.objects.get(token=token)
-                if email==dbobject.email:
-      		        k=1
+ 	 	dbobject=sellerlogindb.objects.get(token=token,email=email)
+                #if email==dbobject.email:
+     	        k=1
 	 except:
 		k=0
 	 if k:
@@ -426,22 +426,19 @@ def updateuser(request):
 
 @csrf_exempt
 def sellergcm(request):
+	
 	if request.method=='POST':
 #Header authorisation
 #Gcm request to google
-		email=""
-		gcmid=""
-		token=""
 		gcmid=request.POST.get('gcmid','')
 		token=request.POST.get('token','')	
 		email=request.POST.get('email','')
 #check the token and update the gcmid, it could change
 		try:
-			dbobject=sellerlogindb.objects.get(token=token)
-			if email==dbobject.email:
-				k=1
-		except:
-			
+			dbobject=sellerlogindb.objects.get(token=token,email=email)
+			#if email==dbobject.email:
+			k=1
+		except:			
 			k=0
 		if k:
 			dbobject.gcmid=str(gcmid);
@@ -465,15 +462,16 @@ def sellergcm(request):
 def sellercategory(request):
 	# accept the prime no category 
 	# check for the token b4
+	k=0 
 	if request.method=='POST':
 		token=request.POST.get('token','')
 		email=request.POST.get('email','')
 		category=request.POST.get('category','')
 		
 		try:
-			dbobject=sellerlogindb.objects.get(token=token)
-			if email==dbobject.email:				
-				k=1
+			dbobject=sellerlogindb.objects.get(token=token,email=email)
+			#if email==dbobject.email:				
+			k=1
 		except:
 			k=0
 			#return render(request,'front.html',)
@@ -546,9 +544,9 @@ def s2c(request):
 				cid=request.POST.get('id','')
 				email=request.POST.get('email','')
 				try:
-					dbobject1=sellerlogindb.objects.get(token=token)
-					if email==dbobject1.email:				
-						k=1
+					dbobject1=sellerlogindb.objects.get(token=token,email=email)
+					#if email==dbobject1.email:				
+					k=1
 				except:
 					k=0
 
@@ -562,7 +560,7 @@ def s2c(request):
 					except:
 						j=0
 					if j:
-						dbobject3=customerlogindb.objects.get(email=dbobject1.Cus_email)
+						dbobject3=customerlogindb.objects.get(email="nivedn3@gmail.com")
 						pson={'delay_while_idle': True, 'collapse_key': 'score_update', 'time_to_live': 108, 'data': {'quoted':1,'bargained':0,'qprice':qprice,'Sel_id':Sel_id,'id':cid,'comment':comment,'prtype':prtype,'deltype':deltype}, 'registration_ids': [dbobject3.gcmid]}	
 						h={'Content-Type': 'application/json', 'Authorization': 'key=AIzaSyBxEodHSh3moPoMwYkipLEXAhYUn3rptTg'}
 						kson=json.dumps(pson)
@@ -672,7 +670,7 @@ def delivery(request):
 			n['result']=0
 			j_d=json.dumps(n)				
 			return HttpResponse(json.dumps(n), content_type='application/json' )
-
+@csrf_exempt
 def pickup(request):
 	if request.method=='POST':
 	#Gcm request to google
@@ -963,14 +961,14 @@ def customersignup(request):
 				n['result']=0
 				j_d=json.dumps(n)				
 				return HttpResponse(json.dumps(n), content_type='application/json' )
-
+@csrf_exempt
 def customerlogin(request):
 	error=[]
 	if request.method=='POST':
 		cusemail=request.POST.get('email','')
 		cuspass=request.POST.get('pass','')	
                 try:	
-			dbobject=customerlogindb.objects.get(email=slremail)
+			dbobject=customerlogindb.objects.get(email=cusemail)
 			k=1
 		except:
 			error.append("email id not registered")
@@ -1007,9 +1005,9 @@ def customergcm(request):
 		email=request.POST.get('email','')
 #check the token and update the gcmid, it could change
 		try:
-			dbobject=customerlogindb.objects.get(token=token)
-			if email==dbobject.email:
-				k=1
+			dbobject=customerlogindb.objects.get(token=token,email=email)
+			#if email==dbobject.email:
+			k=1
 		except:
 			
 			k=0
