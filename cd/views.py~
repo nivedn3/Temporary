@@ -566,10 +566,7 @@ def s2c(request):
 
 						dbobject3=customerlogindb.objects.get(email=dbobject1.Cus_email)
 						pson={'delay_while_idle': True, 'collapse_key': 'score_update', 'time_to_live': 108, 'data': {'quoted':"1",'bargained'=0,'qprice':qprice,'name': pname,'Sel_id':Sel_id,'id':cid,'comment':comment,'prtype':prtype,'deltype':deltype}, 'registration_ids': [dbobject3.gcmid]}	
-<<<<<<< HEAD
-=======
 
->>>>>>> 4b3eddc67cdd5e13f24fda90d6dfb745ac2a3ae3
 						dbobject3=customerlogindb.objects.get(email="nivedn3@gmail.com")
 						pson={'delay_while_idle': True, 'collapse_key': 'score_update', 'time_to_live': 108, 'data': {'quoted':1,'bargained':0,'qprice':qprice,'Sel_id':Sel_id,'id':cid,'comment':comment,'prtype':prtype,'deltype':deltype}, 'registration_ids': [dbobject3.gcmid]}	
 
