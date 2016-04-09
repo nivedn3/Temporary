@@ -527,8 +527,8 @@ def  customer2seller(request):
 			k=k+1
 			q.append(r.text)
 		n={}
-		n['result']=gcmida
-		n['re']=q
+		n['result']=1
+		n['id']=cus_id
 		j_d=json.dumps(n)
 		return HttpResponse(json.dumps(n),content_type='application/json')
 			
@@ -560,13 +560,13 @@ def s2c(request):
 					except:
 						j=0
 					if j:
-<<<<<<< HEAD
+
 						dbobject3=customerlogindb.objects.get(email=dbobject1.Cus_email)
 						pson={'delay_while_idle': True, 'collapse_key': 'score_update', 'time_to_live': 108, 'data': {'quoted':"1",'bargained'=0,'qprice':qprice,'name': pname,'Sel_id':Sel_id,'id':cid,'comment':comment,'prtype':prtype,'deltype':deltype}, 'registration_ids': [dbobject3.gcmid]}	
-=======
+
 						dbobject3=customerlogindb.objects.get(email="nivedn3@gmail.com")
 						pson={'delay_while_idle': True, 'collapse_key': 'score_update', 'time_to_live': 108, 'data': {'quoted':1,'bargained':0,'qprice':qprice,'Sel_id':Sel_id,'id':cid,'comment':comment,'prtype':prtype,'deltype':deltype}, 'registration_ids': [dbobject3.gcmid]}	
->>>>>>> 809d6a2fd0e1977206f8ca5cf783af64f859f3a7
+
 						h={'Content-Type': 'application/json', 'Authorization': 'key=AIzaSyBxEodHSh3moPoMwYkipLEXAhYUn3rptTg'}
 						kson=json.dumps(pson)
 						r=requests.post("https://android.googleapis.com/gcm/send",data=kson,headers=h)
