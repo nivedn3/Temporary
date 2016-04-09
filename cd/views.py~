@@ -527,13 +527,11 @@ def  customer2seller(request):
 			k=k+1
 			q.append(r.text)
 		n={}
-<<<<<<< HEAD
 		n['id']=cus_id
+
 		n['result']=1
-=======
-		n['result']=1
-		n['id']=cus_id
->>>>>>> 4b3eddc67cdd5e13f24fda90d6dfb745ac2a3ae3
+
+
 		j_d=json.dumps(n)
 		return HttpResponse(json.dumps(n),content_type='application/json')
 			
