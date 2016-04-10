@@ -552,6 +552,7 @@ def s2c(request):
 					k=1
 				except:
 					k=0
+
 				if k:
 					Sel_id=''.join(random.choice(string.lowercase+string.uppercase+string.digits) for i in range(32))
 					dbobject2=selldb(Cus_id=cid,Q_price=qprice,Sel_type=prtype,Sel_comments=comment,Sel_email=email,Sel_id=Sel_id,Sel_deltype=deltype)
@@ -562,8 +563,12 @@ def s2c(request):
 					except:
 						j=0
 					if j:
+
 						dbobject3=customerlogindb.objects.get(email=dbobject1.Cus_email)
-						pson={'delay_while_idle': True, 'collapse_key': 'score_update', 'time_to_live': 108, 'data': {'quoted':"1",'bargained':0,'qprice':qprice,'name': pname,'Sel_id':Sel_id,'id':cid,'comment':comment,'prtype':prtype,'deltype':deltype}, 'registration_ids': [dbobject3.gcmid]}	
+						pson={'delay_while_idle': True, 'collapse_key': 'score_update', 'time_to_live': 108, 'data': {'quoted':"1",'bargained'=0,'qprice':qprice,'name': pname,'Sel_id':Sel_id,'id':cid,'comment':comment,'prtype':prtype,'deltype':deltype}, 'registration_ids': [dbobject3.gcmid]}	
+
+						dbobject3=customerlogindb.objects.get(email="nivedn3@gmail.com")
+						pson={'delay_while_idle': True, 'collapse_key': 'score_update', 'time_to_live': 108, 'data': {'quoted':1,'bargained':0,'qprice':qprice,'Sel_id':Sel_id,'id':cid,'comment':comment,'prtype':prtype,'deltype':deltype}, 'registration_ids': [dbobject3.gcmid]}	
 
 						h={'Content-Type': 'application/json', 'Authorization': 'key=AIzaSyBxEodHSh3moPoMwYkipLEXAhYUn3rptTg'}
 						kson=json.dumps(pson)
@@ -988,7 +993,6 @@ def customerlogin(request):
 			else:	
 				n={}
 				n['result']=0
-				n['token']=token
 				j_d=json.dumps(n)
 				return HttpResponse(json.dumps(n),content_type='application/json')
 		elif k==0:

@@ -1,0 +1,175 @@
+from django.shortcuts import render
+import string,random
+# Create your views here.
+from models import selelrlogin
+
+def sellerlogin(request):
+	error=[]
+	if request.method=='POST':
+		slremail=request.POST.get('email','')
+		slrpass=request.POST.get('pass','')	
+                try:	
+			dbobject=sellerlogin.objects.get(email=slremail)
+			k=1
+		except:
+			error.append("email id not registered")
+			k=0
+		if k:		
+			if slrpass==dbobject.passwrd :
+				return render(request,'loggedin.html',)
+				#token generation
+				token=''.join(random.choice(string.lowercase+string.uppercase+string.digits) for i in range(32))
+				dbobject.token=token
+				dbobject.save()	
+			else:	
+				error.append('Username or password is incorrect')
+				return render(request,'front.html',{'error':error})
+		
+
+def signup(request):
+	errors=[]
+	if request.method=='POST':
+		if not request.POST.get('name',''):
+			errors.append('Enter name')
+		if not request.POST.get('pass',''):
+			errors.append('Enter password')
+		if not request.POST.get('email',''):
+			errors.append('Enter email')
+		if not request.POST.get('mobile',''):
+			errors.append('Enter mobile_no')
+		if not request.POST.get('shopname',''):
+			errors.append('Enter Shopname')
+		if not request.POST.get('city',''):
+			errors.append('Enter city')
+		if not request.POST.get('street',''):
+			errors.append('Enter street')
+		if not request.POST.get('sid',''):
+			errors.append('Enter shopid')
+		if not errors:
+			name=request.POST.get('name','')
+			pswd=request.POST.get('pass','')
+			email=request.POST.get('email','')
+			mobile=request.POST.get('mobile','')
+			shopname=request.POST.get('shopname','')
+			city=request.POST.get('city','')
+			street=request.POST.get('street','')
+			sid=request.POST.get('sid','')
+			office_no=request.POST.get('office','')
+			#c=users.objects.get(email=email)
+			try:
+				c=users.objects.get(email=email)
+				errors.append('email already used')
+				k=0
+			except:	
+				k=1
+			if k:
+				dbobject=sellerlogin(user=name,passwrd=pswd,email=email,mobile=mobile,shopname=shopname,
+					shopid=sid,office_no=office_no,city=city,street=street)
+				dbobject.save()
+				return render(request,'signup.html',)
+			else:
+				return render(request,'front.html',{'errors':errors})	
+		if errors:
+			return render(request,'front.html',{'errors':errors})
+
+def sellergcm(request):
+	if request.method=='POST':
+#Header authorisation
+#Gcm request to google		
+		gcm=request.POST.get('gcmid','')
+		token=request.POST.get('token','')	
+#check the token and update the gcmid, it could change
+		try:
+			dbobject.sellerlogin.objects.get(token=token)
+			k=1;
+		except:
+			return render(request,'front')
+def sellercategory(request):
+	# accept the prime no category 
+	# check for the token b4
+	if request.method=='POST':
+		gcm=request.POST.get('gcmid','');
+		
+
+def sellercustomer1(request):
+	# sends price,details of pro everything check for token
+	if request.method=='POST':
+		token=request.POST.get('token','')
+		dbobject=
+
+		
+def customer1(request):
+	#sends  the url
+#scrape and get image and send to phone cust
+	if request.method=='POST':
+		#p=request.POST.get('link','')
+		s=""
+		p=""
+		c=""
+		sc=""
+		k=""
+		scat=""
+		cat=""
+		if "amazon" in str(request.GET):
+ 			p="dasd"
+			s=""
+			link=request.POST.get('item','')
+		
+		
+			r=requests.get(link)
+		
+			soup=BeautifulSoup(r.content,"lxml")
+			#return render(request,'item.html',{'item':link})
+			data=soup.find_all("span",{"id":"productTitle"})
+			for i in data:
+
+				s=i.text
+			price=soup.find_all("span",{"id":"priceblock_saleprice"})
+			for i in price:
+				k=i.text
+			cat=soup.find_all("a",{'class':'a-link-normal a-color-tertiary'})
+			c=str(cat[0].text)
+			sc=str(cat[1].text)
+			
+			#return render(request,'item.html',{'item':s,'price':k,'kk':c,'sc'=sc})	
+		elif "snapdeal" in str(request.GET):
+			p="dasd"
+			s=""
+			link=request.GET['item']
+			r=requests.get(link)
+			soup=BeautifulSoup(r.content,"lxml")
+			#return render(request,'item.html',{'item':link})
+			data=soup.find_all("h1",{"itemprop":"name"})
+			for i in data:
+				s=i.text
+			price=soup.find_all("span",{"itemprop":"price"})
+			for i in price:
+				k=i.text
+				#return render(request,'item.html',{'item':s,'nn':k,'kk':'Thats all'})	
+		if 'computer' in c.lower() :
+			cat="Computers"
+			if "laptop" in sc.lower():
+				scat="Laptops"
+			elif "desktop" in sc.lower() or "printer" in sc.lower() or "monitor" in sc.lower() :
+				scat="Desktops,printers and monitors"
+		return render(request,'item.html',{'item':s,'price':k,'c':c,'sc':sc,"cios":cat,"scios":scat})	
+	else:
+		return render(request,'item.html',)
+def customer2seller(request):
+	#url,expiry etcc...... and send it to phones through gcm
+
+
+	
+def custcnf(request):
+	#confirms
+
+def sellerconf(request):
+	#conf and check for the token 
+
+
+
+
+
+			
+		
+		

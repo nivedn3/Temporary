@@ -563,7 +563,7 @@ def s2c(request):
 						j=0
 					if j:
 						dbobject3=customerlogindb.objects.get(email=dbobject1.Cus_email)
-						pson={'delay_while_idle': True, 'collapse_key': 'score_update', 'time_to_live': 108, 'data': {'quoted':"1",'bargained':0,'qprice':qprice,'name': pname,'Sel_id':Sel_id,'id':cid,'comment':comment,'prtype':prtype,'deltype':deltype}, 'registration_ids': [dbobject3.gcmid]}	
+						pson={'delay_while_idle': True, 'collapse_key': 'score_update', 'time_to_live': 108, 'data': {'quoted':"1",'bargained'=0,'qprice':qprice,'name': pname,'Sel_id':Sel_id,'id':cid,'comment':comment,'prtype':prtype,'deltype':deltype}, 'registration_ids': [dbobject3.gcmid]}	
 
 						h={'Content-Type': 'application/json', 'Authorization': 'key=AIzaSyBxEodHSh3moPoMwYkipLEXAhYUn3rptTg'}
 						kson=json.dumps(pson)
@@ -988,7 +988,6 @@ def customerlogin(request):
 			else:	
 				n={}
 				n['result']=0
-				n['token']=token
 				j_d=json.dumps(n)
 				return HttpResponse(json.dumps(n),content_type='application/json')
 		elif k==0:

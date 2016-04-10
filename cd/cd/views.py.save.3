@@ -2,7 +2,7 @@ from django.shortcuts import render
 import string,random
 import sys
 # Create your views here.
-from cd.models import customerlogindb,sellerlogindb,request_conf,selldb,adv,feed
+from cd.models import sellerlogindb,request_conf,selldb
 from django.views.decorators.csrf import csrf_exempt 
 import json
 from django.http import HttpResponse
@@ -32,8 +32,10 @@ def sellerlogin(request):
 				token=''.join(random.choice(string.lowercase+string.uppercase+string.digits) for i in range(32))
 				dbobject.token=token
 				dbobject.save()
+
 				dbobject1=request_conf.objects.all()
 				k=0
+
 				Cus_link=[]
 				Ser_product=[]
 				Ser_image=[]
@@ -48,6 +50,8 @@ def sellerlogin(request):
 				for i in dbobject1:
 					total={}
 					if (int(dbobject.category)%int(dbobject1[k].cus_category)==0 and (dbobject1[k].Cus_id not in dbobject.decline)):
+						
+						
 						total['Cus_link']=str(dbobject1[k].Cus_link)
 						total['Ser_product']=str(dbobject1[k].Ser_product)
 						total['Ser_image']=str(dbobject1[k].Ser_image)
@@ -57,48 +61,20 @@ def sellerlogin(request):
 						total['Cus_id']=str(dbobject1[k].Cus_id)
 						total['Ser_price']=dbobject1[k].Ser_price
 						total['time']=dbobject1[k].time
-						try:
-							dbobject3=selldb.objects.get(Cus_id=dbobject1[k].Cus_id)
-							check=1
-						except:
-							check=0
-						if(check):
-							total['quoted']=1
-							total['qprice']=dbobject3.Q_price
-							total['Sel_comments']=dbobject3.Sel_comments
-							total['deltype']=dbobject3.Sel_deltype
-							total['type']=dbobject3.Sel_type
-							total['cuscon']=dbobject3.Cus2_conf
-							total['selcon']=dbobject3.Sel2_conf						
-							if dbobject3.bprice!=0:
-								total['bargained']=1
-								total['bgprice']=dbobject3.bprice
-								total['bgexptime']=dbobject3.btime
-							else:
-								total['bargained']=0
-						else:
-							total['qprice']="Nil"
-							total['quoted']=0
+						
 						aks[const]=total
 						const=const+1	
+
 					k=k+1
+
+
+
 				n={}
 				n['result']=1
 				n['token']=token
 				n['Transactions']=aks
 				n['length']=const
 				n['cat']=dbobject.category
-				n['user']=dbobject.user
-				n['password']=dbobject.password
-				n['mobile']=dbobject.mobile
-				n['shopname']=dbobject.shopname
-                		n['shopid']=dbobject.shopid
-                		n['office_no']=dbobject.office_no
-                		n['city']=dbobject.city
-                		n['Address1']=dbobject.Address1
-                		n['Address2']=dbobject.Address2
-				n['sel_loc']=dbobject.sel_loc
-				n['category']=dbobject.category
 			#	n['Ser_image']=Ser_image
 			#	n['Cus_name']=Cus_name
 			#	n['cus_loc']=cus_loc
@@ -166,6 +142,23 @@ def simg(request):
 def sellersignup(request):
 	errors=[]
 	if request.method=='POST':
+		if not request.POST.get('name',''):
+			errors.append('Enter name')
+		if not request.POST.get('pass',''):
+			errors.append('Enter password')
+		if not request.POST.get('email',''):
+			errors.append('Enter email')
+		if not request.POST.get('mobile',''):
+			errors.append('Enter mobile_no')
+		if not request.POST.get('shopname',''):
+			errors.append('Enter Shopname')
+		#if not request.POST.get('city',''):
+		#	errors.append('Enter city')
+		#if not request.POST.get('street',''):
+		#	errors.append('Enter street')
+		if not request.POST.get('sid',''):
+			errors.append('Enter shopid')
+		if not errors:
 			name=request.POST.get('name','')
 			pswd=request.POST.get('pass','')
 			email=request.POST.get('email','')
@@ -177,6 +170,9 @@ def sellersignup(request):
 			office_no=request.POST.get('office','')
 			Add2=request.POST.get('address2','')
 			sel_loc=request.POST.get('sel_loc','')
+			#c=users.objects.get(email=email)
+			
+			
 			try:
 				c=sellerlogindb.objects.get(email=email)
 				errors.append('email already used')
@@ -206,6 +202,16 @@ def sellersignup(request):
 				j_d=json.dumps(n)				
 				return HttpResponse(json.dumps(n), content_type='application/json' )
 				
+		
+
+
+				'''return render(request,'signup.html',)
+			else:
+				return render(request,'front.html',{'errors':errors})	
+		if errors:
+
+			return render(request,'front.html',{'errors':errors})'''
+
 @csrf_exempt
 def decline(request):
                 token=request.POST.get('token','')
@@ -213,9 +219,9 @@ def decline(request):
                 decid=request.POST.get('decid','')
 #check the token and update the decline field, it could change
                 try:
-                        dbobject=sellerlogindb.objects.get(token=token,email=email)
-                        #if email==dbobject.email:
-                        k=1
+                        dbobject=sellerlogindb.objects.get(token=token)
+                        if email==dbobject.email:
+                                k=1
                 except:
 
                         k=0
@@ -233,21 +239,21 @@ def decline(request):
                         j_d=json.dumps(n)
                         return HttpResponse(json.dumps(n), content_type='application/json' )
 @csrf_exempt
-def advt(request):
+def adv(request):
                 token=request.POST.get('token','')
                 email=request.POST.get('email','')
-                advt=request.POST.get('adv','')
+                adv=request.POST.get('adv','')
 		sdate=request.POST.get('sdate','')
 		edate=request.POST.get('edate','')		
 #check the token and update the decline field, it could change
                 try:
-                        dbobject=sellerlogindb.objects.get(token=token,email=email)
-                       # if email==dbobject.email:
-                        k=1
+                        dbobject=sellerlogindb.objects.get(token=token)
+                        if email==dbobject.email:
+                                k=1
                 except:
                         k=0
                 if k:
-                        q=adv(advt=advt,sdate=sdate,edate=edate,email=email)
+                        q=adv(adv=adv,sdate=sdate,edate=edate,email=email)
 			q.save()
                         n={}
                         n['result']=1
@@ -283,15 +289,14 @@ def bargain(request):
 			Sel_email=dbobject2.Sel_email
 			dbobject=sellerlogindb.objects.get(email=Sel_email)
 			dbobject1=request_conf.objects.get(Cus_id=dbobject2.Cus_id)
-                        pson={'delay_while_idle': True, 'collapse_key': 'score_update', 'time_to_live': 108, 'data': {'quoted':"1",'bargained':1,'selcon':0,'cuscon':0,'bgprice':bprice,'bgexptime':btime,'id':dbobject2.Cus_id,'price': dbobject1.Ser_price,'loc':dbobject1.cus_loc, 'name': dbobject1.Ser_product,'buyer_name':dbobject1.Cus_name,'imgurl':dbobject1.Ser_image,'time':dbobject1.Cus_expiry,'timenow':dbobject1.time,'qprice':dbobject2.Q_price,'deltype':dbobject2.Sel_deltype,'type':dbobject2.Sel_type,'comment':dbobject2.Sel_comments},'registration_ids':[dbobject.gcmid]}
+                        pson={'delay_while_idle': True, 'collapse_key': 'score_update', 'time_to_live': 108, 'data': {'quoted':"1",'bargained':1,'bgprice':bprice,'bgexptime':btime,'Cus_id':dbobject2.Cus_id,'price': dbobject1.Ser_price,'cus_loc':dbobject1.cus_loc, 'name': dbobject1.Ser_product,'buyer_name':dbobject1.Cus_name,'imgurl':dbobject1.Ser_image,'time':dbobject1.Cus_expiry,'timenow':dbobject1.time},'registration_ids':dbobject.gcmid}
+
                         h={'Content-Type': 'application/json', 'Authorization': 'key=AIzaSyBxEodHSh3moPoMwYkipLEXAhYUn3rptTg'}
                         kson=json.dumps(pson)
                         r=requests.post("https://android.googleapis.com/gcm/send",data=kson,headers=h)
 
                         n={}
                         n['result']=1
-			n['gcmid']=dbobject.gcmid
-			n['r']=r.text
                         j_d=json.dumps(n)
                         return HttpResponse(json.dumps(n), content_type='application/json' )
              #   elif k==0:
@@ -309,14 +314,14 @@ def feed(request):
 		feed=request.POST.get('feed','')
 #check the token and update the decline field, it could change
                 try:
-                        dbobject=sellerlogindb.objects.get(token=token,email=email)
-                        #if email==dbobject.email:
-                        k=1
+                        dbobject=sellerlogindb.objects.get(token=token)
+                        if email==dbobject.email:
+                                k=1
                 except:
 
                         k=0
                 if k:
-                        dbobject=feed(feedb=feed,email=email)
+                        dbobject=feed(feed=feed,email=email)
                         dbobject.save()
 			n={}
                         n['result']=1
@@ -335,9 +340,9 @@ def userdata(request):
          token=request.POST.get('token','')
          email=request.POST.get('email','')
          try:
-                dbobject=sellerlogindb.objects.get(token=token,email=email)
-                #if email==dbobject.email:
-                k=1
+                dbobject=sellerlogindb.objects.get(token=token)
+                if email==dbobject.email:
+                        k=1
          except:
                 k=0
          if k:
@@ -380,9 +385,9 @@ def updateuser(request):
          token=request.POST.get('token','')
          email=request.POST.get('email','')
 	 try:
- 	 	dbobject=sellerlogindb.objects.get(token=token,email=email)
-                #if email==dbobject.email:
-     	        k=1
+ 	 	dbobject=sellerlogindb.objects.get(token=token)
+                if email==dbobject.email:
+      		        k=1
 	 except:
 		k=0
 	 if k:
@@ -426,19 +431,22 @@ def updateuser(request):
 
 @csrf_exempt
 def sellergcm(request):
-	
 	if request.method=='POST':
 #Header authorisation
 #Gcm request to google
+		email=""
+		gcmid=""
+		token=""
 		gcmid=request.POST.get('gcmid','')
 		token=request.POST.get('token','')	
 		email=request.POST.get('email','')
 #check the token and update the gcmid, it could change
 		try:
-			dbobject=sellerlogindb.objects.get(token=token,email=email)
-			#if email==dbobject.email:
-			k=1
-		except:			
+			dbobject=sellerlogindb.objects.get(token=token)
+			if email==dbobject.email:
+				k=1
+		except:
+			
 			k=0
 		if k:
 			dbobject.gcmid=str(gcmid);
@@ -462,16 +470,15 @@ def sellergcm(request):
 def sellercategory(request):
 	# accept the prime no category 
 	# check for the token b4
-	k=0 
 	if request.method=='POST':
 		token=request.POST.get('token','')
 		email=request.POST.get('email','')
 		category=request.POST.get('category','')
 		
 		try:
-			dbobject=sellerlogindb.objects.get(token=token,email=email)
-			#if email==dbobject.email:				
-			k=1
+			dbobject=sellerlogindb.objects.get(token=token)
+			if email==dbobject.email:				
+				k=1
 		except:
 			k=0
 			#return render(request,'front.html',)
@@ -501,9 +508,8 @@ def  customer2seller(request):
 		exptime=request.POST.get('time','')
 		cus_loc=request.POST.get('cus_loc','')
 		name=request.POST.get('name','')
-		cus_email=request.POST.get('cus_email','')
 		tim=int(round(time.time() * 1000))
-		dbobject2=request_conf(time=tim,Ser_product=pname,Ser_price=price,Ser_image=img,cus_category=cat,Cus_expiry=exptime,cus_loc=cus_loc,Cus_name=name,Cus_email=cus_email)
+		dbobject2=request_conf(time=tim,Ser_product=pname,Ser_price=price,Ser_image=img,cus_category=cat,Cus_expiry=exptime,cus_loc=cus_loc,Cus_name=name)
 		cus_id=''.join(random.choice(string.lowercase+string.uppercase+string.digits) for i in range(30))
 		dbobject2.Cus_id=cus_id
 		dbobject2.save()
@@ -520,18 +526,17 @@ def  customer2seller(request):
 		k=0
 		q=[]
 		for i in gcmida:
-			pson={'delay_while_idle': True, 'collapse_key': 'score_update', 'time_to_live': 108, 'data': {'quoted':"0",'price': price,'cus_loc':cus_loc, 'name': pname,'buyer_name':name,'imgurl': img,'time':exptime,'id':cus_id,'timenow':tim}, 'registration_ids': [gcmida[k]]}	
+			
+			pson={'delay_while_idle': True, 'collapse_key': 'score_update', 'time_to_live': 108, 'data': {'quoted':"0",'price': price,'cus_loc':cus_loc, 'name': pname,'buyer_name':name,'imgurl': img,'time':exptime,'id':cus_id,'timenow':tim}, 'registration_ids': [gcmida[k]]}
+			
 			h={'Content-Type': 'application/json', 'Authorization': 'key=AIzaSyBxEodHSh3moPoMwYkipLEXAhYUn3rptTg'}
 			kson=json.dumps(pson)
 			r=requests.post("https://android.googleapis.com/gcm/send",data=kson,headers=h)
 			k=k+1
 			q.append(r.text)
 		n={}
-		n['id']=cus_id
-
-		n['result']=1
-
-
+		n['result']=gcmida
+		n['re']=q
 		j_d=json.dumps(n)
 		return HttpResponse(json.dumps(n),content_type='application/json')
 			
@@ -547,37 +552,23 @@ def s2c(request):
 				cid=request.POST.get('id','')
 				email=request.POST.get('email','')
 				try:
-					dbobject1=sellerlogindb.objects.get(token=token,email=email)
-					#if email==dbobject1.email:				
-					k=1
+					dbobject1=sellerlogindb.objects.get(token=token)
+					if email==dbobject1.email:				
+						k=1
 				except:
 					k=0
+
 				if k:
 					Sel_id=''.join(random.choice(string.lowercase+string.uppercase+string.digits) for i in range(32))
+
 					dbobject2=selldb(Cus_id=cid,Q_price=qprice,Sel_type=prtype,Sel_comments=comment,Sel_email=email,Sel_id=Sel_id,Sel_deltype=deltype)
 					dbobject2.save()
-					try:
-						dbobject1=request_conf.objects.get(Cus_id=cid)
-						j=1
-					except:
-						j=0
-					if j:
-						dbobject3=customerlogindb.objects.get(email=dbobject1.Cus_email)
-						pson={'delay_while_idle': True, 'collapse_key': 'score_update', 'time_to_live': 108, 'data': {'quoted':"1",'bargained':0,'qprice':qprice,'name': pname,'Sel_id':Sel_id,'id':cid,'comment':comment,'prtype':prtype,'deltype':deltype}, 'registration_ids': [dbobject3.gcmid]}	
+					n={}
+					n['result']=1
+					j_d=json.dumps(n)				
+					return HttpResponse(json.dumps(n), content_type='application/json' )
+		  
 
-						h={'Content-Type': 'application/json', 'Authorization': 'key=AIzaSyBxEodHSh3moPoMwYkipLEXAhYUn3rptTg'}
-						kson=json.dumps(pson)
-						r=requests.post("https://android.googleapis.com/gcm/send",data=kson,headers=h)
-						n={}
-						n['result']=1
-						j_d=json.dumps(n)				
-						return HttpResponse(json.dumps(n), content_type='application/json' )
-					else:
-						n={}
-						#Cus id didnt match
-						n['result']="-1"
-						j_d=json.dumps(n)				
-						return HttpResponse(json.dumps(n), content_type='application/json' )
 				elif k==0:
 					n={}
 					n['result']=0
@@ -596,12 +587,6 @@ def cus_conf(request):
 			if k:
 				dbobject2.Cus2_conf=1
 				dbobject2.save()
-				dbobject=sellerlogindb.objects.get(email=dbobject2.Sel_email)
-				dbobject1=request_conf.objects.get(Cus_id=dbobject2.Cus_id)
-				pson={'delay_while_idle': True, 'collapse_key': 'score_update', 'time_to_live': 108, 'data': {'quoted':"1",'bargained':1,'selcon':1,'cuscon':1,'bgprice':dbobject2.bprice,'bgexptime':dbobject2.btime,'id':dbobject2.Cus_id,'price': dbobject1.Ser_price,'loc':dbobject1.cus_loc, 'name': dbobject1.Ser_product,'buyer_name':dbobject1.Cus_name,'imgurl':dbobject1.Ser_image,'time':dbobject1.Cus_expiry,'timenow':dbobject1.time,'qprice':dbobject2.Q_price,'deltype':dbobject2.Sel_deltype,'type':dbobject2.Sel_type,'comment':dbobject2.Sel_comments},'registration_ids':[dbobject.gcmid]}
-				h={'Content-Type': 'application/json', 'Authorization': 'key=AIzaSyBxEodHSh3moPoMwYkipLEXAhYUn3rptTg'}
-	                        kson=json.dumps(pson)
-	                        r=requests.post("https://android.googleapis.com/gcm/send",data=kson,headers=h)				
 				n={}
 				n['result']=1
 				j_d=json.dumps(n)				
@@ -611,102 +596,8 @@ def cus_conf(request):
 				n['result']=0
 				j_d=json.dumps(n)				
 				return HttpResponse(json.dumps(n), content_type='application/json' )
-@csrf_exempt
-def sel_conf(request):
-	 token=request.POST.get('token','')
-         email=request.POST.get('email','')
-	 Cus_id=request.POST.get('Cus_id','')
-	 try:
- 	 	dbobject=sellerlogindb.objects.get(token=token)
-                if email==dbobject.email:
-      		        k=1
-	 except:
-		k=0
-	 if k:
-		dbobject2=selldb.objects.get(Sel_email=email,Cus_id=Cus_id)
-			
-		dbobject2.Sel2_conf=1
-		dbobject2.save()
-		n={}
-		n['result']=1
-		j_d=json.dumps(n)				
-		return HttpResponse(json.dumps(n), content_type='application/json' )
-	 else:
-		n={}
-		n['result']=0
-		j_d=json.dumps(n)				
-		return HttpResponse(json.dumps(n), content_type='application/json' )
-		
-@csrf_exempt
-def delivery(request):
-	if request.method=='POST':
-	#Gcm request to google
-		Sel_id=request.POST.get('Sel_id','')
-		token=request.POST.get('token','')	
-		email=request.POST.get('email','')
-		delivery=request.POST.get('delivery','')
-		try:
-			dbobject=customerlogindb.objects.get(token=token)
-			if email==dbobject.email:
-				k=1
-		except:
-			
-			k=0
-		if k:
-			dbobject1=selldb.objects.get(Sel_id=Sel_id)
-			dbobject1.delivery=delivery
-			dbobject1.save()
-			dbobject2=sellerlogindb.objects.get(email=dbobject1.Sel_email)
-			dbobject3=request_conf.objects.get(Cus_id=dbobject1.Cus_id)
-			
-			pson={'delay_while_idle': True, 'collapse_key': 'score_update', 'time_to_live': 108, 'data': {'quoted':"1",'bargained':1,'selcon':1,'cuscon':1,'del':delivery,'id':dbobject1.Cus_id,'cus_loc':dbobject3.cus_loc},'registration_ids':[dbobject2.gcmid]}
-			h={'Content-Type': 'application/json', 'Authorization': 'key=AIzaSyBxEodHSh3moPoMwYkipLEXAhYUn3rptTg'}
-	                kson=json.dumps(pson)
-	                r=requests.post("https://android.googleapis.com/gcm/send",data=kson,headers=h)	
-			n={}
-			n['result']=1
-			j_d=json.dumps(n)				
-			return HttpResponse(json.dumps(n), content_type='application/json' )
-				
-		elif k==0:
-			n={}
-			n['result']=0
-			j_d=json.dumps(n)				
-			return HttpResponse(json.dumps(n), content_type='application/json' )
-@csrf_exempt
-def pickup(request):
-	if request.method=='POST':
-	#Gcm request to google
-		Sel_id=request.POST.get('Sel_id','')
-		token=request.POST.get('token','')	
-		email=request.POST.get('email','')
-		pickup=request.POST.get('pickup','')
-		try:
-			dbobject=sellerlogindb.objects.get(token=token)
-			if email==dbobject.email:
-				k=1
-		except:
-			
-			k=0
-		if k:
-			dbobject2=selldb.objects.get(Sel_id=Sel_id)
-			dbobject3=request_conf.get(Cus_id=dbobject2.Cus_id)			
-			cus_email=dbobject3.Cus_email
-			dbobject3=customerlogindb(email=cus_email)
-			pson={'delay_while_idle': True, 'collapse_key': 'score_update', 'time_to_live': 108, 'data': {'quoted':"1",'bargained':1,'selcon':1,'cuscon':1,'del':delivery,'id':dbobject2.Cus_id,'pickup':pickup},'registration_ids':[dbobject3.gcmid]}
-			h={'Content-Type': 'application/json', 'Authorization': 'key=AIzaSyBxEodHSh3moPoMwYkipLEXAhYUn3rptTg'}
-	                kson=json.dumps(pson)
-	                r=requests.post("https://android.googleapis.com/gcm/send",data=kson,headers=h)	
-			n={}
-			n['result']=1
-			j_d=json.dumps(n)				
-			return HttpResponse(json.dumps(n), content_type='application/json')
-		elif k==0:
-			n={}             
-			n['result']=0      
-			j_d=json.dumps(n)                                                        				
-			return HttpResponse(json.dumps(n), content_type='application/json' )
-			
+
+
 @csrf_exempt
 def item(request):
 	#
@@ -933,104 +824,9 @@ Snapdeal
 shopclues
 '''
 
-@csrf_exempt
-def customersignup(request):
-	errors=[]
-	if request.method=='POST':
-			name=request.POST.get('name','')
-			pswd=request.POST.get('pass','')
-			email=request.POST.get('email','')
-			mobile=request.POST.get('mobile','')
-			try:
-				c=customerlogindb.objects.get(email=email)
-				errors.append('email already used')
-				k=0
-			except:	
-				k=1
-			if k:
-				p=customerlogindb(user=name,password=pswd,email=email,mobile=mobile)
-				p.save()
-				#makng token 
-				token=''.join(random.choice(string.lowercase+string.uppercase+string.digits) for i in range(32))
-				p.token=token
-				p.save()
-				n={}
-				n['result']=1
-				n['token']=token
-				j_d=json.dumps(n)	
-				return HttpResponse(json.dumps(n), content_type='application/json' )
-			elif k==0:
-				n={}
-				n['result']=0
-				j_d=json.dumps(n)				
-				return HttpResponse(json.dumps(n), content_type='application/json' )
-@csrf_exempt
-def customerlogin(request):
-	error=[]
-	if request.method=='POST':
-		cusemail=request.POST.get('email','')
-		cuspass=request.POST.get('pass','')	
-                try:	
-			dbobject=customerlogindb.objects.get(email=cusemail)
-			k=1
-		except:
-			error.append("email id not registered")
-			k=0
-		if k:		
-			if cuspass==dbobject.password :
-				token=''.join(random.choice(string.lowercase+string.uppercase+string.digits) for i in range(32))
-				dbobject.token=token
-				dbobject.save()
-				n={}
-				n['result']=1
-				j_d=json.dumps(n)
-				return HttpResponse(json.dumps(n), content_type='application/json')
-			else:	
-				n={}
-				n['result']=0
-				n['token']=token
-				j_d=json.dumps(n)
-				return HttpResponse(json.dumps(n),content_type='application/json')
-		elif k==0:
-				n={}
-				n['result']=-1
-				j_d=json.dumps(n)
-				return HttpResponse(json.dumps(n),content_type='application/json')
-	else:
-		return render(request,'front.html',)		
 
-@csrf_exempt
-def customergcm(request):
-	if request.method=='POST':
-#Header authorisation
-#Gcm request to google
-		gcmid=request.POST.get('gcmid','')
-		token=request.POST.get('token','')	
-		email=request.POST.get('email','')
-#check the token and update the gcmid, it could change
-		try:
-			dbobject=customerlogindb.objects.get(token=token,email=email)
-			#if email==dbobject.email:
-			k=1
-		except:
-			
-			k=0
-		if k:
-			dbobject.gcmid=str(gcmid);
-			dbobject.save()
-			n={}
-			n['result']=1
-			n['returnid']=dbobject.gcmid
-			j_d=json.dumps(n)				
-			return HttpResponse(json.dumps(n), content_type='application/json' )
-				
-		elif k==0:
-			n={}
-			n['result']=0
-			
-			n['gcmid']=gcmid
-			j_d=json.dumps(n)				
-			return HttpResponse(json.dumps(n), content_type='application/json' )
+
+
 
 			
 		
